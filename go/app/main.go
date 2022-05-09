@@ -25,6 +25,9 @@ func root(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+/*func getItem(c echo.Context) error {
+
+}*/
 func addItem(c echo.Context) error {
 	// Get form data
 	name := c.FormValue("name")
