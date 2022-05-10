@@ -1,0 +1,16 @@
+{
+ "items": [
+  {
+   "name": "jacket",
+   "category": "fashion"
+  },
+  {
+   "name": "onigiri",
+   "category": "food"
+  },
+  {
+   "name": "banana",
+   "category": "food"
+  }
+ ]
+}
