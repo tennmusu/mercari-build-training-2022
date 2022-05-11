@@ -24,8 +24,8 @@ type Response struct {
 	Message string `json:"message"`
 }
 type item struct {
-	Category string `json:"category"`
 	Name     string `json:"name"`
+	Category string `json:"category"`
 	Image    string `json:"image"`
 }
 type item_schema struct {
@@ -36,7 +36,7 @@ type item_schema struct {
 }
 
 type itemlist struct {
-	Items []item_schema `json:"items"`
+	Items []item `json:"items"`
 }
 
 func getSHA256Binary(s string) []byte {
@@ -54,16 +54,15 @@ func getItems(c echo.Context) error {
 	if err != nil {
 		c.Logger().Error("error occured while opening database:%s", err)
 	}
-	rows, err := db.Query("select * from items")
+	rows, err := db.Query("select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id")
 	var result itemlist
 	defer rows.Close()
 	for rows.Next() {
-		var id int
-		var category_id int
+		var category string
 		var name string
 		var image string
-		rows.Scan(&id, &category_id, &name, &image)
-		r_json := item_schema{Id: id, Category_Id: category_id, Name: name, Image: image}
+		rows.Scan(&name, &category, &image)
+		r_json := item{Name: name, Category: category, Image: image}
 		result.Items = append(result.Items, r_json)
 	}
 	return c.JSON(http.StatusOK, result.Items)
@@ -76,7 +75,7 @@ func get_detail(c echo.Context) error {
 	}
 	items_id := c.Param("item_id")
 	//inner join句を利用してアイテムの詳細情報を取得
-	row := db.QueryRow("select items.name,categories.name,items.image from items inner join categories on items.category_id=categories.id where items.id=?", items_id)
+	row := db.QueryRow("select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.id=?", items_id)
 	var category string
 	var name string
 	var image string
@@ -137,17 +136,16 @@ func searchbykeyword(c echo.Context) error {
 		c.Logger().Error("error occured while opening database:%s", err)
 	}
 	//アイテム名にkeywordを含むアイテムを、正規表現を利用して取得
-	Q := fmt.Sprintf("select * from items where name glob '*%s*'", keyword)
+	Q := fmt.Sprintf("select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where  items.name glob '*%s*'", keyword)
 	rows, err := db.Query(Q)
 	defer rows.Close()
 	var result itemlist
 	for rows.Next() {
-		var id int
-		var category_id int
+		var category string
 		var name string
 		var image string
-		rows.Scan(&id, &category_id, &name, &image)
-		r_json := item_schema{Id: id, Category_Id: category_id, Name: name, Image: image}
+		rows.Scan(&name, &category, &image)
+		r_json := item{Name: name, Category: category, Image: image}
 		result.Items = append(result.Items, r_json)
 	}
 	return c.JSON(http.StatusOK, result)

@@ -37,7 +37,7 @@ def get_items():
     conn.row_factory = dict_factory
     c = conn.cursor()
     #全アイテムを取得
-    sql = 'select * from items'
+    sql = 'select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id'
     c.execute(sql)
     items=c.fetchall()
     c.close()
@@ -51,7 +51,7 @@ def get_detail(item_id:int):
     conn.row_factory = dict_factory
     c = conn.cursor()
     #inner join句を利用してアイテムの詳細情報を取得
-    sql = f'select items.name,categories.name,items.image from items inner join categories on items.category_id=categories.id where items.id={item_id}'
+    sql = f'select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.id={item_id}'
     c.execute(sql)
     result=c.fetchone()
     conn.commit()
@@ -96,7 +96,7 @@ def searchbykeyword(keyword:str):
     conn.row_factory = dict_factory
     c = conn.cursor()
     #アイテム名にkeywordを含むアイテムを、正規表現を利用して取得
-    sql = f'select * from items where name glob \'*{keyword}*\''
+    sql = f'select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.name glob \'*{keyword}*\''
     c.execute(sql)
     result={"items":c.fetchall()}
     c.close()
