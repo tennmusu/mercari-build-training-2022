@@ -1,4 +1,13 @@
-FROM alpine
-
+# syntax=docker/dockerfile:1
+FROM python:3.8-slim-buster
+WORKDIR /app
+COPY python/requirements.txt requirements.txt
+RUN pip install Cython
+RUN pip install wheel
+RUN pip install -r requirements.txt
+COPY db db
+COPY python python
 # STEP4-4では以下は変更しない
-CMD ["python", "-V"]
+#CMD ["python", "-V"]
+WORKDIR python
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port", "9000"]

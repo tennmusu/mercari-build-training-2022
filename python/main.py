@@ -32,7 +32,7 @@ def root():
 
 @app.get("/items")
 def get_items():
-    dbname = '..\db\mercari.sqlite3'
+    dbname = '../db/mercari.sqlite3'
     conn=sqlite3.connect(dbname)
     conn.row_factory = dict_factory
     c = conn.cursor()
@@ -46,7 +46,7 @@ def get_items():
 
 @app.get("/items/{item_id}")
 def get_detail(item_id:int):
-    dbname = '..\db\mercari.sqlite3'
+    dbname = '../db/mercari.sqlite3'
     conn=sqlite3.connect(dbname)
     conn.row_factory = dict_factory
     c = conn.cursor()
@@ -74,7 +74,7 @@ def add_item(name: str = Form(...),category: str = Form(...),image: str = Form(.
         #with open('.\items.json','w') as f:
         #    json.dump(items,f,indent=2)
     #sqlite3の場合
-    dbname = '..\db\mercari.sqlite3'
+    dbname = '../db/mercari.sqlite3'
     conn=sqlite3.connect(dbname)
     c = conn.cursor()
     #カテゴリー名からカテゴリーidを取得
@@ -91,7 +91,7 @@ def add_item(name: str = Form(...),category: str = Form(...),image: str = Form(.
 
 @app.get("/search")
 def searchbykeyword(keyword:str):
-    dbname = '..\db\mercari.sqlite3'
+    dbname = '../db/mercari.sqlite3'
     conn=sqlite3.connect(dbname)
     conn.row_factory = dict_factory
     c = conn.cursor()
