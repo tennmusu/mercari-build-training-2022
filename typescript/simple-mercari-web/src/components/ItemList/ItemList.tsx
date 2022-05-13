@@ -8,7 +8,7 @@ interface Item {
 };
 
 const server = process.env.API_URL || 'http://127.0.0.1:9000';
-const placeholderImage = process.env.PUBLIC_URL + '/logo192.png';
+//const placeholderImage = process.env.PUBLIC_URL + '/logo192.png';
 
 export const ItemList: React.FC<{}> = () => {
   const [items, setItems] = useState<Item[]>([])
@@ -30,19 +30,41 @@ export const ItemList: React.FC<{}> = () => {
       .catch(error => {
         console.error('GET error:',error)
       })
+
   }
+
+  const fetchImage = (item: Item):string=> {
+   
+      fetch(server.concat('/image/'+item.image),
+    {
+      method: 'GET',
+      mode: 'cors',
+      headers : {
+        'Content-Type': 'image/jpeg',
+        'Accept': 'image/jpeg	',
+      },
+    })
+      .then(response => response)
+      .then(data => {
+        return data.url
+      })
+      .catch(error => {
+        console.error('GET error:',error) 
+      })
+        return server+'/image/'+item.image
+    }
+
 
   useEffect(() => {
     fetchItems();
   }, []);
-  
   return (
-    <div>
+    <div className='wrapper'>
       { items.map((item) => {
         return (
           <div key={item.id} className='ItemList'>
             {/* TODO: Task 1: Replace the placeholder image with the item image */}
-            <img src={placeholderImage}/>
+            <img className='ItemList_image'src={fetchImage(item)}/>
             <p>
             <span>Name: {item.name}</span>
             <br/>
