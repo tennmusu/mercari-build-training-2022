@@ -6,12 +6,18 @@ export const Listing: React.FC<{}> = () => {
   const initialState = {
     name: "",
     category: "",
-    image: "",
+    image: new File([""], "init"),
   };
   const [values, setValues] = useState(initialState);
   
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [event.target.name]: event.target.value });
+      if(event.target.type=='file'){
+        if(!event.target.files) return
+        setValues({ ...values, [event.target.name]: event.target.files[0] });
+
+      }else{
+        setValues({ ...values, [event.target.name]: event.target.value });
+      }
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()

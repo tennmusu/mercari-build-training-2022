@@ -1,11 +1,13 @@
 import os
 import logging
 import pathlib
+import shutil
 import sqlite3
 import hashlib
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, File,Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Request
 
 app = FastAPI()
 logger = logging.getLogger("uvicorn")
@@ -18,6 +20,7 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["GET","POST","PUT","DELETE"],
     allow_headers=["*"],
+    max_age=3600,
 )
 # dict_factoryの定義
 def dict_factory(cursor, row):
@@ -26,6 +29,12 @@ def dict_factory(cursor, row):
        d[col[0]] = row[idx]
    return d
 
+@app.middleware("http")
+async def add_my_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = 'http://localhost:3000'
+    response.headers["Vary"] = 'Origin'
+    return response
 @app.get("/")
 def root():
     return {"message": "Hello, world!"}
@@ -37,7 +46,7 @@ def get_items():
     conn.row_factory = dict_factory
     c = conn.cursor()
     #全アイテムを取得
-    sql = 'select * from items'
+    sql = 'select items.id,items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id'
     c.execute(sql)
     items=c.fetchall()
     c.close()
@@ -51,7 +60,7 @@ def get_detail(item_id:int):
     conn.row_factory = dict_factory
     c = conn.cursor()
     #inner join句を利用してアイテムの詳細情報を取得
-    sql = f'select items.name,categories.name,items.image from items inner join categories on items.category_id=categories.id where items.id={item_id}'
+    sql = f'select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.id={item_id}'
     c.execute(sql)
     result=c.fetchone()
     conn.commit()
@@ -60,11 +69,16 @@ def get_detail(item_id:int):
     return result
 
 @app.post("/items")
-def add_item(name: str = Form(...),category: str = Form(...),image: str = Form(...)):
-    logger.info(f"Receive item: {name}, category: {category}")
+def add_item(name: str = Form(...),category: str = Form(...),image: UploadFile = File(...)):
+    logger.info(f"Receive item: {name}, category: {category},image {image}")
     #画像名をハッシュ化した後、[.拡張子]部分と結合
-    image_title=image.split('.')[0]
-    s256 = hashlib.sha256(image_title.encode()).hexdigest()+'.'+image.split('.')[1]
+    image_title=image.filename.split('.')[0]
+    s256 = hashlib.sha256(image_title.encode()).hexdigest()+'.'+image.filename.split('.')[1]
+    #サーバー内に保存するpathを生成
+    path = images/s256
+
+    with open(path, 'w+b') as buffer:
+        shutil.copyfileobj(image.file, buffer)
     #ポストされた新アイテムを保存
     #jsonの場合
         #new_item={"name":  name, "category": category}
@@ -96,7 +110,7 @@ def searchbykeyword(keyword:str):
     conn.row_factory = dict_factory
     c = conn.cursor()
     #アイテム名にkeywordを含むアイテムを、正規表現を利用して取得
-    sql = f'select * from items where name glob \'*{keyword}*\''
+    sql = f'select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.name glob \'*{keyword}*\''
     c.execute(sql)
     result={"items":c.fetchall()}
     c.close()
