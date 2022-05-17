@@ -91,9 +91,9 @@ def get_detail(item_id: int):
 
 @app.post("/items")
 def add_item(
-    name: str = Form(...), category: str = Form(...), image: UploadFile = File(...)
+    name: str = Form(...), category_id: str = Form(...), image: UploadFile = File(...)
 ):
-    logger.info(f"Receive item: {name}, category: {category},image {image}")
+    logger.info(f"Receive item: {name}, category_id: {category_id},image {image}")
     # 画像名をハッシュ化した後、[.拡張子]部分と結合
     image_title = image.filename.split(".")[0]
     s256 = (
@@ -120,17 +120,15 @@ def add_item(
     dbname = "../db/mercari.sqlite3"
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    # カテゴリー名からカテゴリーidを取得
-    sql = "select id from categories where name=?"
-    c.execute(sql, [category])
-    id = int(c.fetchone()[0])
     # 取得したカテゴリーidとアイテム名、画像をinsertする
     sql = "insert into items(name, category_id,image) values(?,?,?)"
-    c.execute(sql, [name, id, s256])
+    c.execute(sql, [name, int(category_id), s256])
     conn.commit()
     c.close()
     conn.close()
-    return {"message": f"item received: {name}, category: {category}, image: {s256}"}
+    return {
+        "message": f"item received: {name}, category_id: {category_id}, image: {s256}"
+    }
 
 
 @app.get("/search")
