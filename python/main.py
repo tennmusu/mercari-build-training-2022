@@ -4,6 +4,7 @@ import pathlib
 import shutil
 import sqlite3
 import hashlib
+import re
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,10 +14,13 @@ app = FastAPI()
 logger = logging.getLogger("uvicorn")
 logger.level = logging.INFO
 images = pathlib.Path(__file__).parent.resolve() / "image"
-origins = [os.environ.get("FRONT_URL", "http://localhost:3000")]
+origins = [
+    os.environ.get("FRONT_URL", "http://localhost:3000"),
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex="https://.*\.ngrok\.io",
     allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
@@ -32,8 +36,10 @@ def dict_factory(cursor, row):
 
 @app.middleware("http")
 async def add_my_headers(request: Request, call_next):
+    origin = str(request.headers.get("origin"))
     response = await call_next(request)
-    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+    if origin == "http://localhost:3000" or re.match("https://.*\.ngrok\.io", origin):
+        response.headers["Access-Control-Allow-Origin"] = origin
     response.headers["Vary"] = "Origin"
     return response
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+console.log(process.env)
 const server = process.env.API_URL || "http://127.0.0.1:9000";
 interface Category {
   id: number;
@@ -88,7 +88,6 @@ export const Listing: React.FC<{}> = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
-  //<input type='text' name='category' id='category' placeholder='category' onChange={onChange} required/>
   return (
     <div className="Listing">
       <form onSubmit={onSubmit}>
