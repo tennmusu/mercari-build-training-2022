@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 import hashlib
 import re
+import uuid
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,6 +33,20 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
+
+
+def hash_image_title(imagefile: str) -> str:
+    # 画像名を取得
+    image_title = imagefile.split(".")[0]
+    # uuidを生成
+    id = str(uuid.uuid4())
+    # 画像名をユニーク化
+    image_title = image_title + id
+    # 画像名をハッシュ化した後、[.拡張子]部分と結合
+    s256 = (
+        hashlib.sha256(image_title.encode()).hexdigest() + "." + imagefile.split(".")[1]
+    )
+    return s256
 
 
 @app.middleware("http")
@@ -100,13 +115,8 @@ def add_item(
     name: str = Form(...), category_id: str = Form(...), image: UploadFile = File(...)
 ):
     logger.info(f"Receive item: {name}, category_id: {category_id},image {image}")
-    # 画像名をハッシュ化した後、[.拡張子]部分と結合
-    image_title = image.filename.split(".")[0]
-    s256 = (
-        hashlib.sha256(image_title.encode()).hexdigest()
-        + "."
-        + image.filename.split(".")[1]
-    )
+    # 画像名をハッシュ化
+    s256 = hash_image_title(image.filename)
     # サーバー内に保存するpathを生成
     path = images / s256
 

@@ -91,7 +91,7 @@ export const Listing: React.FC<{}> = () => {
   return (
     <div className="Listing">
       <form onSubmit={onSubmit}>
-        <div>
+        <div className="Form">
           <input
             type="text"
             name="name"
@@ -126,10 +126,9 @@ export const Listing: React.FC<{}> = () => {
             required
           />
           <button type="submit">List this item</button>
-          <p>{isjpg ? '' :'File extension should be jpg.'}</p>
-          
         </div>
       </form>
+      {isjpg ? <></> :<p className='error-message'>File extension should be jpg.</p>}
     </div>
   );
 };
