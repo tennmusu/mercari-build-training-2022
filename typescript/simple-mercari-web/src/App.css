@@ -23,6 +23,10 @@
   font-size: calc(10px + 1vmin);
   color: white;
 }
+.Form { 
+  display: flex;
+  column-gap: 5px;
+}
 .wrapper{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -42,16 +46,21 @@
   padding:0px
 }
 .ItemList_image {
-  display:block;
-  max-height: 200px;
+  height: 200px;
   max-width: 100%;
-  margin:0 auto;
-  object-fit: scale-down;
 }
 .App-link {
   color: #61dafb;
 }
-
+.error-message {
+  border: 1px solid #a4282f;
+  background-color: #f7c9cc;
+  border-radius: 10px;
+  text-align: center;
+  color: #c00912;
+  padding-bottom: 4px;
+  width:630px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
