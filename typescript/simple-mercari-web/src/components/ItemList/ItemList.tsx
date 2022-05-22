@@ -12,6 +12,7 @@ const server = process.env.API_URL || 'http://127.0.0.1:9000';
 
 export const ItemList: React.FC<{}> = () => {
   const [items, setItems] = useState<Item[]>([])
+
   const fetchItems = () => {
     fetch(server.concat('/items'),
     {
@@ -34,24 +35,7 @@ export const ItemList: React.FC<{}> = () => {
   }
 
   const fetchImage = (item: Item):string=> {
-   
-      fetch(server.concat('/image/'+item.image),
-    {
-      method: 'GET',
-      mode: 'cors',
-      headers : {
-        'Content-Type': 'image/jpeg',
-        'Accept': 'image/jpeg	',
-      },
-    })
-      .then(response => response)
-      .then(data => {
-        return data.url
-      })
-      .catch(error => {
-        console.error('GET error:',error) 
-      })
-        return server+'/image/'+item.image
+      return server+'/image/'+item.image
     }
 
 

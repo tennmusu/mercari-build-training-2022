@@ -104,6 +104,8 @@ def get_detail(item_id: int):
     sql = f"select items.name,categories.name as category,items.image from items inner join categories on items.category_id=categories.id where items.id={item_id}"
     c.execute(sql)
     result = c.fetchone()
+    if result == None:
+        raise HTTPException(status_code=404, detail="Item not found")
     conn.commit()
     c.close()
     conn.close()

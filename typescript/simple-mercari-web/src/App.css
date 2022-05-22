@@ -61,6 +61,22 @@
   padding-bottom: 4px;
   width:630px;
 }
+.Login {
+  background-color: #222427;
+  min-height: 8vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  align-items: center;
+  justify-content: left;
+  font-size: calc(10px + 1vmin);
+  color: white;
+}
+.Login div {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

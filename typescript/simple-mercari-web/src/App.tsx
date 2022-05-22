@@ -1,24 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import './App.css';
-import { ItemList } from './components/ItemList';
-import { Listing } from './components/Listing';
-
-function App() { 
+import "./App.css";
+import { RouterConfig } from "./components/RouterConfig";
+import { Providers } from "./components/Providers";
+function App() {
   return (
-    <div>
-      <header className='Title'>
-        <p>
-          <b>Simple Mercari</b>
-        </p>
-      </header>
-      <div>
-        <Listing/>
-      </div>
-      <div>
-        <ItemList/>
-      </div>
-    </div>
-  )
+    <Providers>
+      <RouterConfig />
+    </Providers>
+  );
 }
 
 export default App;
