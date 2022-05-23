@@ -36,18 +36,23 @@
 }
 .ItemList {
   background-color: #222427;
-  height:300px;
+  height:310px;
   width: 250px;
   border: 1px solid;
-  border-color: #61dafb;
   text-align: center;
   font-size: calc(10px + 1vmin);
   color: white;
   padding:0px
 }
-.ItemList_image {
+.ItemList_image{
+  border: 1px solid #ccc;
+  
+}
+.ItemList_image img{
+  display: block;
   height: 200px;
-  max-width: 100%;
+  object-fit: scale-down;
+  width: 100%;
 }
 .App-link {
   color: #61dafb;
@@ -76,6 +81,11 @@
   display: flex;
   gap: 5px;
   margin-bottom: 20px;
+}
+
+.Link{
+  color: #000;
+  text-decoration: none;
 }
 @keyframes App-logo-spin {
   from {
