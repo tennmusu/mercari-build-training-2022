@@ -1,16 +1,14 @@
 import { ItemList } from '../ItemList';
 import { Listing } from '../Listing';
-
+import { MenuAppBar } from '../MenuAppBar';
 
 export const Content: React.FC<{}> = () => {
 
   return (
     <div>
-      <header className='Title'>
-        <p>
-          <b>Simple Mercari</b>
-        </p>
-      </header>
+      <div>
+        <MenuAppBar/>
+      </div>
       <div>
         <Listing/>
       </div>

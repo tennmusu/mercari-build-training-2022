@@ -5,6 +5,7 @@ export type AuthUserContextType = {
   user: UserType | null;
   signin: (user:UserType, callback:() => void) => void;
   signout: (callback:() => void) => void;
+  getUser:()=>UserType|null;
 }
 const AuthUserContext = React.createContext<AuthUserContextType>({} as AuthUserContextType);
 
@@ -29,8 +30,11 @@ export const AuthUserProvider = (props:Props) => {
     callback();
   }
 
+  const getUser = ():UserType|null => {
+    return user
+  }
 
-  const value:AuthUserContextType = { user, signin, signout };
+  const value:AuthUserContextType = { user, signin, signout,getUser };
   return (
     <AuthUserContext.Provider value={value}>
       {props.children}

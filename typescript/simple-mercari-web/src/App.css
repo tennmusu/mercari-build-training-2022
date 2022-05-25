@@ -15,7 +15,6 @@
 
 .Listing {
   background-color: #222427;
-  min-height: 8vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,69 +22,44 @@
   font-size: calc(10px + 1vmin);
   color: white;
 }
-.Form { 
-  display: flex;
-  column-gap: 5px;
+
+
+.SOLD {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 80px 80px 0 0;
+  border-color: #ff0015 transparent transparent transparent;
 }
-.wrapper{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  margin: 20px;
-  column-gap: 0px;
-  row-gap: 1em;
-}
-.ItemList {
-  background-color: #222427;
-  height:310px;
-  width: 250px;
-  border: 1px solid;
-  text-align: center;
-  font-size: calc(10px + 1vmin);
-  color: white;
-  padding:0px
-}
-.ItemList_image{
-  border: 1px solid #ccc;
-  
-}
-.ItemList_image img{
-  display: block;
-  height: 200px;
-  object-fit: scale-down;
-  width: 100%;
+.SOLD p {
+  position: relative;
+  text-align: left;
+  top:-65px; left: 10px;
+  font-size: large;
+  color: rgb(255, 255, 255);
+  transform: rotate(-45deg);
 }
 .App-link {
   color: #61dafb;
 }
-.error-message {
-  border: 1px solid #a4282f;
-  background-color: #f7c9cc;
-  border-radius: 10px;
-  text-align: center;
-  color: #c00912;
-  padding-bottom: 4px;
-  width:630px;
-}
+
 .Login {
   background-color: #222427;
   min-height: 8vh;
   display: flex;
   flex-direction: column;
-  row-gap: 5px;
+  row-gap: 10px;
   align-items: center;
   justify-content: left;
   font-size: calc(10px + 1vmin);
   color: white;
 }
-.Login div {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 20px;
-}
 
-.Link{
-  color: #000;
+
+.Link {
   text-decoration: none;
+  color:#1976d2;
 }
 @keyframes App-logo-spin {
   from {

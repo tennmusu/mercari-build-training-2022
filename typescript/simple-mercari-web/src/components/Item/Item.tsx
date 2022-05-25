@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Button, CardActionArea, CardActions } from "@mui/material";
+
 interface Item {
   name: string;
   category: string;
@@ -17,7 +23,6 @@ export const ItemDetail: React.FC<{}> = () => {
   };
   const [item, setItem] = useState<Item>(initialState);
   let { id } = useParams();
-
   const fetchItem = () => {
     fetch(server.concat("/items/" + id), {
       method: "GET",
@@ -46,24 +51,42 @@ export const ItemDetail: React.FC<{}> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="ItemList">
-      {item.image === "" ? (
-        <></>
-      ) : (
+    <>
+      {item.image !== "" && (
         <>
-          <div className="ItemList_image">
-            <img alt={"image of"+item.name} src={fetchImage(item)} />
-          </div>
-          <p>
-            <span>Name: {item.name}</span>
-            <br />
-            <span>Category: {item.category}</span>
-          </p>
+          <Card sx={{ width: 250, height: 310 }}>
+            <CardActionArea>
+              <div className="SOLD">
+                <p>SOLD</p>
+              </div>
+              <CardMedia
+                component="img"
+                height="200"
+                image={fetchImage(item)}
+                alt={item.name}
+              />
+              <CardContent>
+                <Typography textAlign="center" variant="body1" component="div">
+                  Name: {item.name}
+                </Typography>
+                <Typography  textAlign="center" variant="body1" >
+                  Category: {item.category}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button
+                size="small"
+                color="primary"
+                sx={{ mt:-1.5 }}
+                onClick={() => navigator.clipboard.writeText(document.URL)}
+              >
+                copy the link
+              </Button>
+            </CardActions>
+          </Card>
         </>
       )}
-      <button onClick={() => navigator.clipboard.writeText(document.URL)}>
-        copy the link
-      </button>
-    </div>
+    </>
   );
 };
