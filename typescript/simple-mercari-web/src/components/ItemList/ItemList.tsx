@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 interface Item {
   id: number;
@@ -13,7 +19,6 @@ const server = process.env.API_URL || "http://127.0.0.1:9000";
 
 export const ItemList: React.FC<{}> = () => {
   const [items, setItems] = useState<Item[]>([]);
-
   const fetchItems = () => {
     fetch(server.concat("/items"), {
       method: "GET",
@@ -41,24 +46,37 @@ export const ItemList: React.FC<{}> = () => {
     fetchItems();
   }, []);
   return (
-    <div className="wrapper">
-      {items.map((item) => {
-        return (
-          <div key={item.id} className="ItemList">
-            <div className="ItemList_image">
-            <img  alt={"image of"+item.name} src={fetchImage(item)} />
-            </div>
-            <p>
-              <span>Name: {item.name}</span>
-              <br />
-              <span>Category: {item.category}</span>
-            </p>
-            <button>
-              <Link  className="Link" to={"item/"+item.id}>show more details</Link>
-            </button>
-          </div>
-        );
-      })}
-    </div>
+      <Grid sx={{pt:2}} container 
+      spacing={0} columns={{ xs: 2, sm: 8, md: 16 }}
+      >
+        {items.map((item) => {
+          return (
+            <Grid  item xs={2} sm={4} md={4} key={item.id}  >
+              <Card key={item.id} sx={{ width: 250, height: 270,mx:"auto"}}>
+                <CardActionArea component={Link} to={"item/" + item.id}>
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={fetchImage(item)}
+                    alt={item.name}
+                  />
+                  <CardContent>
+                    <Typography
+                      textAlign="center"
+                      variant="body1"
+                      component="div"
+                    >
+                      Name: {item.name}
+                    </Typography>
+                    <Typography textAlign="center" variant="body1">
+                      Category: {item.category}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
   );
 };

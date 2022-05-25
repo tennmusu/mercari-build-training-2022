@@ -2,9 +2,28 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserType, RoleType } from "../../types";
 import { AuthUserContextType, useAuthUserContext } from "../../providers";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+
 const server = process.env.API_URL || "http://127.0.0.1:9000";
 
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#eff7ff",
+    },
+  },
+});
+const Form = styled("form")(({ theme }) => ({
+  display: "flex",
+  gap: 5,
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
 export const Login: React.FC<{}> = () => {
   const initialState = {
     id: "",
@@ -34,29 +53,44 @@ export const Login: React.FC<{}> = () => {
 
   return (
     <div className="Login">
-      <form className="Form" onSubmit={onSubmit}>
-        <input
-          type="text"
-          name="id"
-          id="id"
-          placeholder="id"
-          onChange={onChange}
-          required
-        />
-        <input
-          type="text"
-          name="password"
-          id="password"
-          placeholder="password"
-          onChange={onChange}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <div>
-        <p>New here?</p>
-        <button type="submit">Sign Up</button>
-      </div>
+      <ThemeProvider theme={theme}>
+        <Form onSubmit={onSubmit}>
+          <input
+            type="text"
+            name="id"
+            id="id"
+            placeholder="id"
+            onChange={onChange}
+            required
+          />
+          <input
+            type="text"
+            name="password"
+            id="password"
+            placeholder="password"
+            onChange={onChange}
+            required
+          />
+          <Button type="submit" variant="contained" size="small">
+            Login
+          </Button>
+        </Form>
+        <div>
+          <Box sx={{ p: 1, gap: 1, display: "flex" }}>
+            <Typography
+              variant="body1"
+              component="div"
+              sx={{ m: 0.5, flexGrow: 1 }}
+            >
+              New here?
+            </Typography>
+
+            <Button type="submit" variant="contained" size="small">
+              Sign Up
+            </Button>
+          </Box>
+        </div>
+      </ThemeProvider>
     </div>
   );
 };
