@@ -68,7 +68,6 @@ export const Listing: React.FC<{}> = () => {
       !values.image.name.includes(".") ||
       values.image.name.split(".")[1] !== "jpg"
     ) {
-      console.log(values.image.name.split(".")[1]);
       setIsJpg(false);
       return;
     } else {
@@ -88,6 +87,7 @@ export const Listing: React.FC<{}> = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("POST success:", data);
+        window.location.reload()
       })
       .catch((error) => {
         console.error("POST error:", error);
