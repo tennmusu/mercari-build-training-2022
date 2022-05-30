@@ -85,7 +85,7 @@ export const Login: React.FC<{}> = () => {
               New here?
             </Typography>
 
-            <Button type="submit" variant="contained" size="small">
+            <Button type="button" variant="contained" size="small">
               Sign Up
             </Button>
           </Box>

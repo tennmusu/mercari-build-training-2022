@@ -46,17 +46,17 @@ export const ItemList: React.FC<{}> = () => {
     fetchItems();
   }, []);
   return (
-      <Grid sx={{pt:2}} container 
-      spacing={0} columns={{ xs: 2, sm: 8, md: 16 }}
+      <Grid sx={{pt:2,rowGap:5}} container 
+      spacing={0} columns={{ xs: 2, sm: 12, md: 16 }}
       >
         {items.map((item) => {
           return (
             <Grid  item xs={2} sm={4} md={4} key={item.id}  >
-              <Card key={item.id} sx={{ width: 250, height: 270,mx:"auto"}}>
+              <Card key={item.id} sx={{ width: 220, height: 220,mx:"auto"}}>
                 <CardActionArea component={Link} to={"item/" + item.id}>
                   <CardMedia
                     component="img"
-                    height="200"
+                    height="150"
                     image={fetchImage(item)}
                     alt={item.name}
                   />
